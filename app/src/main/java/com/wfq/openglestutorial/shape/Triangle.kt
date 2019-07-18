@@ -14,4 +14,7 @@ class Triangle {
                 "void main() {" +
                 "gl_FragColor = vColor;" +
                 "}"
+
+    init {
+    }
 }
