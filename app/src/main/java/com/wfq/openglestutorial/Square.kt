@@ -18,22 +18,23 @@ class Square {
 
     private val indices = shortArrayOf(0, 1, 2, 0, 2, 3)
 
-    private val vertexBuffer: FloatBuffer
-    private val indexBuffer: ShortBuffer
+    private val vertexBuffer: FloatBuffer =
+        ByteBuffer.allocateDirect(vertices.size * 4).run {
+            order(ByteOrder.nativeOrder())
+            asFloatBuffer().apply {
+                put(vertices)
+                position(0)
+            }
+        }
 
-    init {
-        val vbb = ByteBuffer.allocateDirect(vertices.size * 4)
-        vbb.order(ByteOrder.nativeOrder())
-        vertexBuffer = vbb.asFloatBuffer()
-        vertexBuffer.put(vertices)
-        vertexBuffer.position(0)
-
-        val ibb = ByteBuffer.allocateDirect(indices.size * 2)
-        ibb.order(ByteOrder.nativeOrder())
-        indexBuffer = ibb.asShortBuffer()
-        indexBuffer.put(indices)
-        indexBuffer.position(0)
-    }
+    private val indexBuffer: ShortBuffer =
+        ByteBuffer.allocateDirect(indices.size * 2).run {
+            order(ByteOrder.nativeOrder())
+            asShortBuffer().apply {
+                put(indices)
+                position(0)
+            }
+        }
 
     fun draw(gl: GL10) {
         gl.glFrontFace(GL10.GL_CCW)
